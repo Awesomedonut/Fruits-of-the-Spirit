@@ -1,6 +1,7 @@
 import pygame
-
+from scripts.main import main
+    
 if __name__ == "__main__":
 
-    print("hello world")
+    main()
     pygame.quit()
