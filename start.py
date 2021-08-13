@@ -1,9 +1,11 @@
+from scripts.mario import Mario
 import pygame
 from scripts.main import main
 from scripts.utils import load_all_images, load_all_music, load_all_sound_effects, draw
 
 if __name__ == "__main__":
     pygame.init()
+    mario = Mario()
    # main()
    
     # for key, value in load_all_images().items():
@@ -16,12 +18,5 @@ if __name__ == "__main__":
  
     while True: #always running
         pygame.time.Clock().tick(60) 
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-            else:
-                draw(win)
+        event_loop()
         
-                pygame.display.update()
-
-    
