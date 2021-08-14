@@ -5,7 +5,7 @@ class Controller:
 
     def __init__(self):
         pygame.init()
-        self.win = pygame.display.set_mode((500, 300))
+        self.win = pygame.display.set_mode((1500, 500))
         self.keys_pressed = pygame.key.get_pressed()
         self.mario = Mario()
 
