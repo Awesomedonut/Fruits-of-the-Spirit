@@ -24,28 +24,28 @@ class Mario:
         self.MAX_Y_ACCEL= 7
         self.gravity = 1
         self.right_frames = []
+        self.left_frames = []
+        self.animation_index = R_DEFAULT
         
+        self.load_from_sheet() #put correct images in right frames and left frame arrays
+
+        self.image = self.right_frames[self.animation_index]
+
 
     def update(self, keys_pressed, win):
         self.handle_state(keys_pressed)
         
         self.update_pos()
+        self.animation()
         self.draw(win)
 
 
     def draw(self, win):
-        
-        layer = pygame.Surface([12, 16]).convert()
-       # rect = layer.get_rect()
+        win.fill((200, 12, 12))    
+        win.blit(self.image, (self.rect.x, self.rect.y))
 
-        layer.blit(self.mario_bros, (0, 0), (178, 32, 12, 16))
-    
-        layer = pygame.transform.scale(layer, (48, 64))
-        win.fill((200, 12, 12))
-        win.blit(layer, (self.rect.x, self.rect.y))
-
-    def animation():
-        pass
+    def animation(self):
+        self.image = self.right_frames[self.animation_index]
 
     def update_pos(self):
 
@@ -64,10 +64,13 @@ class Mario:
 
     def handle_state(self, keys_pressed):
         if self.state == STAND:
+            self.animation_index = R_DEFAULT
             self.standing(keys_pressed)
         if self.state == WALK:
+            self.animation_index = R_WALK1
             self.walking(keys_pressed)
         if self.state == JUMP:
+            self.animation_index = R_JUMP
             self.jumping()
 
     def standing(self, keys_pressed):
@@ -116,20 +119,26 @@ class Mario:
             print(f"y vel is {self.y_vel}")
             self.state = STAND
 
+    def get_image(self, x, y, width, height):
+        layer = pygame.Surface([width, height]).convert()
+        rect = layer.get_rect()
+        layer.blit(self.mario_bros, (0, 0), (x, y, width, height))
+        layer = pygame.transform.scale(layer, (rect.width * SIZE_MULTIPLIER, rect.height * SIZE_MULTIPLIER))
+        return layer
+
     def load_from_sheet(self):
-        self.right_frames.append(self.get_image(178, 32, 12, 16))
-        
+        self.right_frames.append(self.get_image(178, 32, 12, 16)) #right
+        self.right_frames.append(self.get_image(80, 32, 15, 16)) #r walk 1
+        self.right_frames.append(self.get_image(99, 32, 15, 16)) #r walk 2
+        self.right_frames.append(self.get_image(114, 32, 15, 16)) #r walk 3
+        self.right_frames.append(self.get_image(144, 32, 16, 16)) #r jump
+        self.right_frames.append(self.get_image(130, 32, 14, 16)) #r skid
+
+        for frame in self.right_frames:
+            flipped_frame = pygame.transform.flip(frame, True, False)
+            self.left_frames.append(flipped_frame)
 
 
-    # def handle_gravity(self):
-    #     if(self.rect.bottom < 600):
-    #         self.y_vel += self.gravity
-    #     else:
-    #         if self.y_vel > 0:
-    #             self.y_vel = 0
-    #         self.state = STAND
-    #     print(f"y vel is {self.y_vel}")
 
-    
             
     
