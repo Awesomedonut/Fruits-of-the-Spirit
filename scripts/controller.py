@@ -21,12 +21,6 @@ class Controller:
             elif event.type == pygame.KEYUP:
                 self.keys_pressed = pygame.key.get_pressed()
             
-            # else:
-            #     mario.draw(win, mario)
-            #     mario.move()
-        
-                 
-
 
     def update(self):
         self.mario.update(self.keys_pressed, self.win)

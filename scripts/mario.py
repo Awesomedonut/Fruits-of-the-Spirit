@@ -23,11 +23,12 @@ class Mario:
         self.MAX_X_ACCEL = 7
         self.MAX_Y_ACCEL= 7
         self.gravity = 1
+        self.right_frames = []
         
 
     def update(self, keys_pressed, win):
         self.handle_state(keys_pressed)
-        self.handle_gravity()
+        
         self.update_pos()
         self.draw(win)
 
@@ -60,14 +61,6 @@ class Mario:
         self.rect.x += self.x_vel
         #if self.rect.y < 600:
         self.rect.y += self.y_vel
-        # print(self.rect.y)
-        # print(self.y_vel)
-        # print(self.state)
-        # else:
-        #     self.y_vel = 0
-        #     self.state = STAND
-        #print("update pos has been called")
-
 
     def handle_state(self, keys_pressed):
         if self.state == STAND:
@@ -95,7 +88,7 @@ class Mario:
         if keys_pressed[pygame.K_a]:
             print("a has been detected")
             self.facing_right = False
-            self.state = WALK
+       
           #  self.x_vel = -10
           
             if self.x_vel > -1 * self.MAX_X_SPEED:
@@ -104,7 +97,7 @@ class Mario:
             print(f"{self.x_vel} a")
         if keys_pressed[pygame.K_d]:
             self.facing_right = True
-            self.state = WALK
+       
             if self.x_vel < self.MAX_X_SPEED:
                self.x_vel += self.x_accel
             print(f"{self.x_vel} d")
@@ -116,17 +109,26 @@ class Mario:
 
     def jumping(self):
         print(f"jumping has been called {self.rect.bottom}")
-        
-        self.state = STAND
-
-    def handle_gravity(self):
-        if(self.rect.bottom < 600):
-            self.y_vel += self.gravity
-        else:
-            self.y_vel = 0
+        self.y_vel += self.gravity
+        if(self.rect.bottom > 600):
+            if self.y_vel > 0:
+                self.y_vel = 0
+            print(f"y vel is {self.y_vel}")
             self.state = STAND
-        print(f"y vel is {self.y_vel}")
-          
+
+    def load_from_sheet(self):
+        self.right_frames.append(self.get_image(178, 32, 12, 16))
+        
+
+
+    # def handle_gravity(self):
+    #     if(self.rect.bottom < 600):
+    #         self.y_vel += self.gravity
+    #     else:
+    #         if self.y_vel > 0:
+    #             self.y_vel = 0
+    #         self.state = STAND
+    #     print(f"y vel is {self.y_vel}")
 
     
             
