@@ -22,7 +22,7 @@ class Mario:
         self.MAX_Y_SPEED = 20
         self.MAX_X_ACCEL = 7
         self.MAX_Y_ACCEL= 7
-        self.gravity = 1
+        self.gravity = 5
         self.right_frames = []
         self.left_frames = []
         self.animation_index = R_DEFAULT
@@ -41,11 +41,16 @@ class Mario:
 
 
     def draw(self, win):
-        win.fill((200, 12, 12))    
+        win.fill((12, 12, 200))    
         win.blit(self.image, (self.rect.x, self.rect.y))
 
     def animation(self):
-        self.image = self.right_frames[self.animation_index]
+        
+        if self.facing_right:
+            self.image = self.right_frames[self.animation_index]
+        else:
+            self.image = self.left_frames[self.animation_index]
+
 
     def update_pos(self):
 
@@ -64,16 +69,17 @@ class Mario:
 
     def handle_state(self, keys_pressed):
         if self.state == STAND:
-            self.animation_index = R_DEFAULT
+            
             self.standing(keys_pressed)
         if self.state == WALK:
-            self.animation_index = R_WALK1
+            
             self.walking(keys_pressed)
         if self.state == JUMP:
-            self.animation_index = R_JUMP
+            
             self.jumping()
 
     def standing(self, keys_pressed):
+        self.animation_index = R_DEFAULT
         if keys_pressed[pygame.K_w]:
             self.state = JUMP
             self.y_vel = -10
@@ -88,6 +94,7 @@ class Mario:
             self.state = WALK
 
     def walking(self, keys_pressed):
+        self.animation_index = R_WALK1
         if keys_pressed[pygame.K_a]:
             print("a has been detected")
             self.facing_right = False
@@ -111,6 +118,7 @@ class Mario:
             
 
     def jumping(self):
+        self.animation_index = R_JUMP
         print(f"jumping has been called {self.rect.bottom}")
         self.y_vel += self.gravity
         if(self.rect.bottom > 600):
@@ -123,7 +131,9 @@ class Mario:
         layer = pygame.Surface([width, height]).convert()
         rect = layer.get_rect()
         layer.blit(self.mario_bros, (0, 0), (x, y, width, height))
+        layer.set_colorkey((0, 0, 0))
         layer = pygame.transform.scale(layer, (rect.width * SIZE_MULTIPLIER, rect.height * SIZE_MULTIPLIER))
+        
         return layer
 
     def load_from_sheet(self):
