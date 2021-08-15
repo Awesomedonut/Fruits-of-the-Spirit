@@ -12,8 +12,8 @@ class Mario:
         self.status = "active"
         self.facing_right = True
         self.state = STAND
-        self.y = 10
-        self.x = 0
+        self.rect.y = 200
+        self.rect.x = 0
         self.x_vel = 0
         self.x_accel = 5
         self.y_vel = 0
@@ -22,7 +22,7 @@ class Mario:
         self.MAX_Y_SPEED = 20
         self.MAX_X_ACCEL = 7
         self.MAX_Y_ACCEL= 7
-        self.gravity = 5
+        self.gravity = 2
         self.right_frames = []
         self.left_frames = []
         self.animation_index = R_DEFAULT
@@ -31,14 +31,11 @@ class Mario:
 
         self.image = self.right_frames[self.animation_index]
 
-
     def update(self, keys_pressed, win):
         self.handle_state(keys_pressed)
-        
         self.update_pos()
         self.animation()
         self.draw(win)
-
 
     def draw(self, win):
         win.fill((12, 12, 200))    
@@ -53,29 +50,15 @@ class Mario:
 
 
     def update_pos(self):
-
-        # if pygame.key.get_pressed()[pygame.K_w]:
-        #     self.y -= 5
-        # if pygame.key.get_pressed()[pygame.K_s]:
-        #     self.y += 5
-        # if pygame.key.get_pressed()[pygame.K_a]:
-        #     self.x -= 5
-        # if pygame.key.get_pressed()[pygame.K_d]:
-        #     self.x += 5
-
         self.rect.x += self.x_vel
-        #if self.rect.y < 600:
         self.rect.y += self.y_vel
 
     def handle_state(self, keys_pressed):
         if self.state == STAND:
-            
             self.standing(keys_pressed)
         if self.state == WALK:
-            
             self.walking(keys_pressed)
         if self.state == JUMP:
-            
             self.jumping()
 
     def standing(self, keys_pressed):
@@ -94,39 +77,40 @@ class Mario:
             self.state = WALK
 
     def walking(self, keys_pressed):
-        self.animation_index = R_WALK1
+        if self.animation_index > R_DEFAULT and self.animation_index < R_JUMP:
+            if self.animation_index == R_WALK3:
+                self.animation_index = R_WALK1
+            else:
+                self.animation_index += 1
+        else:
+            self.animation_index = R_WALK1
         if keys_pressed[pygame.K_a]:
-            print("a has been detected")
             self.facing_right = False
-       
-          #  self.x_vel = -10
-          
             if self.x_vel > -1 * self.MAX_X_SPEED:
                 
                 self.x_vel -= self.x_accel
             print(f"{self.x_vel} a")
+
         if keys_pressed[pygame.K_d]:
             self.facing_right = True
-       
             if self.x_vel < self.MAX_X_SPEED:
                self.x_vel += self.x_accel
             print(f"{self.x_vel} d")
-        if keys_pressed[pygame.K_w]:
 
+        if keys_pressed[pygame.K_w]:
             self.y_vel = -10
             self.state = JUMP
-            
 
     def jumping(self):
         self.animation_index = R_JUMP
         print(f"jumping has been called {self.rect.bottom}")
         self.y_vel += self.gravity
-        if(self.rect.bottom > 600):
+        if (self.rect.bottom > 800):
             if self.y_vel > 0:
                 self.y_vel = 0
+                self.state = WALK
             print(f"y vel is {self.y_vel}")
-            self.state = STAND
-
+            
     def get_image(self, x, y, width, height):
         layer = pygame.Surface([width, height]).convert()
         rect = layer.get_rect()
