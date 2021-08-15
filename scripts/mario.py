@@ -1,6 +1,5 @@
 from scripts.constants import *
 from scripts.utils import *
-
 import pygame
 
 class Mario:
@@ -25,7 +24,7 @@ class Mario:
         self.gravity = 2
         self.right_frames = []
         self.left_frames = []
-        self.animation_index = R_DEFAULT
+        self.animation_index = MOV_DEFAULT
         
         self.load_from_sheet() #put correct images in right frames and left frame arrays
 
@@ -48,7 +47,6 @@ class Mario:
         else:
             self.image = self.left_frames[self.animation_index]
 
-
     def update_pos(self):
         self.rect.x += self.x_vel
         self.rect.y += self.y_vel
@@ -62,7 +60,7 @@ class Mario:
             self.jumping()
 
     def standing(self, keys_pressed):
-        self.animation_index = R_DEFAULT
+        self.animation_index = MOV_DEFAULT
         if keys_pressed[pygame.K_w]:
             self.state = JUMP
             self.y_vel = -10
@@ -77,14 +75,16 @@ class Mario:
             self.state = WALK
 
     def walking(self, keys_pressed):
-        if self.animation_index > R_DEFAULT and self.animation_index < R_JUMP:
-            if self.animation_index == R_WALK3:
-                self.animation_index = R_WALK1
+        if self.animation_index > MOV_DEFAULT and self.animation_index < MOV_JUMP:
+            if self.animation_index == MOV_WALK3:
+                self.animation_index = MOV_WALK1
             else:
                 self.animation_index += 1
         else:
-            self.animation_index = R_WALK1
+            self.animation_index = MOV_WALK1
         if keys_pressed[pygame.K_a]:
+            if self.x_vel > 0:
+                self.animation_index = MOV_SKID
             self.facing_right = False
             if self.x_vel > -1 * self.MAX_X_SPEED:
                 
@@ -92,6 +92,8 @@ class Mario:
             print(f"{self.x_vel} a")
 
         if keys_pressed[pygame.K_d]:
+            if self.x_vel < 0:
+                self.animation_index = MOV_SKID
             self.facing_right = True
             if self.x_vel < self.MAX_X_SPEED:
                self.x_vel += self.x_accel
@@ -102,7 +104,7 @@ class Mario:
             self.state = JUMP
 
     def jumping(self):
-        self.animation_index = R_JUMP
+        self.animation_index = MOV_JUMP
         print(f"jumping has been called {self.rect.bottom}")
         self.y_vel += self.gravity
         if (self.rect.bottom > 800):
@@ -131,8 +133,3 @@ class Mario:
         for frame in self.right_frames:
             flipped_frame = pygame.transform.flip(frame, True, False)
             self.left_frames.append(flipped_frame)
-
-
-
-            
-    
