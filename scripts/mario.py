@@ -7,12 +7,10 @@ class Mario:
     def __init__(self):
         self.lives = 3
         self.mario_bros = load_all_images()["mario_bros"]
-        self.rect = self.mario_bros.get_rect()
         self.status = "active"
         self.facing_right = True
         self.state = STAND
-        self.rect.y = 200
-        self.rect.x = 0
+
         self.x_vel = 0
         self.x_accel = 5
         self.y_vel = 0
@@ -22,6 +20,7 @@ class Mario:
         self.MAX_X_ACCEL = 7
         self.MAX_Y_ACCEL= 7
         self.gravity = 2
+        self.friction = 2
         self.right_frames = []
         self.left_frames = []
         self.animation_index = MOV_DEFAULT
@@ -29,6 +28,9 @@ class Mario:
         self.load_from_sheet() #put correct images in right frames and left frame arrays
 
         self.image = self.right_frames[self.animation_index]
+        self.rect = self.image.get_rect()
+        self.rect.y = SCREEN_HEIGHT - 200
+        self.rect.x = 0
 
     def update(self, keys_pressed, win):
         self.handle_state(keys_pressed)
@@ -50,6 +52,10 @@ class Mario:
     def update_pos(self):
         self.rect.x += self.x_vel
         self.rect.y += self.y_vel
+        print(f"current rect.y: {self.rect.y}")
+        print(f"current rect.bottom: {self.rect.bottom}")
+        print(f"current rect.height: {self.rect.height}")
+
 
     def handle_state(self, keys_pressed):
         if self.state == STAND:
@@ -107,7 +113,7 @@ class Mario:
         self.animation_index = MOV_JUMP
         print(f"jumping has been called {self.rect.bottom}")
         self.y_vel += self.gravity
-        if (self.rect.bottom > 800):
+        if (self.rect.bottom > SCREEN_HEIGHT - 200 + 96 ):
             if self.y_vel > 0:
                 self.y_vel = 0
                 self.state = WALK
@@ -116,6 +122,8 @@ class Mario:
     def get_image(self, x, y, width, height):
         layer = pygame.Surface([width, height]).convert()
         rect = layer.get_rect()
+        print(f"rect height is {rect.height}")
+
         layer.blit(self.mario_bros, (0, 0), (x, y, width, height))
         layer.set_colorkey((0, 0, 0))
         layer = pygame.transform.scale(layer, (rect.width * SIZE_MULTIPLIER, rect.height * SIZE_MULTIPLIER))
