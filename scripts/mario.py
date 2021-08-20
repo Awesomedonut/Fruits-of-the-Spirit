@@ -109,6 +109,25 @@ class Mario:
             self.y_vel = -10
             self.state = JUMP
 
+        # if self.x_vel != 0:
+        #     if self.facing_right:
+        #         self.x_vel -= self.friction
+        #     else:
+        #         self.x_vel += self.friction
+
+        if self.x_vel > 0 and self.facing_right == True:
+            self.x_vel -= self.friction
+            if self.x_vel < 0:
+                self.x_vel = 0
+        elif self.x_vel < 0 and self.facing_right == False:
+            self.x_vel += self.friction
+            if self.x_vel > 0:
+                self.x_vel = 0
+
+        if self.x_vel == 0:
+            self.state = STAND
+        
+
     def jumping(self):
         self.animation_index = MOV_JUMP
         print(f"jumping has been called {self.rect.bottom}")
