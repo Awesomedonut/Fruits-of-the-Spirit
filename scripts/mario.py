@@ -20,7 +20,9 @@ class Mario:
         self.MAX_X_ACCEL = 7
         self.MAX_Y_ACCEL= 7
         self.gravity = 2
-        self.friction = 2
+
+        self.jump_height = -30
+
         self.right_frames = []
         self.left_frames = []
         self.animation_index = MOV_DEFAULT
@@ -52,10 +54,6 @@ class Mario:
     def update_pos(self):
         self.rect.x += self.x_vel
         self.rect.y += self.y_vel
-        print(f"current rect.y: {self.rect.y}")
-        print(f"current rect.bottom: {self.rect.bottom}")
-        print(f"current rect.height: {self.rect.height}")
-
 
     def handle_state(self, keys_pressed):
         if self.state == STAND:
@@ -69,8 +67,8 @@ class Mario:
         self.animation_index = MOV_DEFAULT
         if keys_pressed[pygame.K_w]:
             self.state = JUMP
-            self.y_vel = -10
-            print("w has been detected")
+            self.y_vel = self.jump_height
+           
 
         if keys_pressed[pygame.K_a]:
             self.facing_right = False
@@ -88,6 +86,7 @@ class Mario:
                 self.animation_index += 1
         else:
             self.animation_index = MOV_WALK1
+
         if keys_pressed[pygame.K_a]:
             if self.x_vel > 0:
                 self.animation_index = MOV_SKID
@@ -97,7 +96,7 @@ class Mario:
                 self.x_vel -= self.x_accel
             print(f"{self.x_vel} a")
 
-        if keys_pressed[pygame.K_d]:
+        elif keys_pressed[pygame.K_d]:
             if self.x_vel < 0:
                 self.animation_index = MOV_SKID
             self.facing_right = True
@@ -105,43 +104,50 @@ class Mario:
                self.x_vel += self.x_accel
             print(f"{self.x_vel} d")
 
+        else:
+            if self.x_vel != 0:
+                self.x_vel = self.x_vel * FRICTION_MU
+                print(self.x_vel)
+
+                if self.facing_right:
+                    if self.x_vel < 0.55:
+                        self.x_vel = 0
+                else:
+                    if self.x_vel > -0.55:
+                        self.x_vel = 0
+            else:
+                self.state = STAND
+
         if keys_pressed[pygame.K_w]:
-            self.y_vel = -10
+            self.y_vel = self.jump_height
             self.state = JUMP
+        
+        # if self.x_vel > 0 and self.facing_right == True:
+        #     self.x_vel -= self.friction
+        #     if self.x_vel < 0:
+        #         self.x_vel = 0
+        # elif self.x_vel < 0 and self.facing_right == False:
+        #     self.x_vel += self.friction
+        #     if self.x_vel > 0:
+        #         self.x_vel = 0
 
-        # if self.x_vel != 0:
-        #     if self.facing_right:
-        #         self.x_vel -= self.friction
-        #     else:
-        #         self.x_vel += self.friction
-
-        if self.x_vel > 0 and self.facing_right == True:
-            self.x_vel -= self.friction
-            if self.x_vel < 0:
-                self.x_vel = 0
-        elif self.x_vel < 0 and self.facing_right == False:
-            self.x_vel += self.friction
-            if self.x_vel > 0:
-                self.x_vel = 0
-
-        if self.x_vel == 0:
-            self.state = STAND
+       
         
 
     def jumping(self):
         self.animation_index = MOV_JUMP
-        print(f"jumping has been called {self.rect.bottom}")
+
         self.y_vel += self.gravity
         if (self.rect.bottom > SCREEN_HEIGHT - 200 + 96 ):
             if self.y_vel > 0:
                 self.y_vel = 0
                 self.state = WALK
-            print(f"y vel is {self.y_vel}")
+ 
             
     def get_image(self, x, y, width, height):
         layer = pygame.Surface([width, height]).convert()
         rect = layer.get_rect()
-        print(f"rect height is {rect.height}")
+    
 
         layer.blit(self.mario_bros, (0, 0), (x, y, width, height))
         layer.set_colorkey((0, 0, 0))

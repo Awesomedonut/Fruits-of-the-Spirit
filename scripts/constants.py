@@ -6,6 +6,7 @@ JUMP = "jumping"
 FALL = "falling"
 
 SIZE_MULTIPLIER = 6
+FRICTION_MU = 0.7
 
 MOV_DEFAULT = 0
 MOV_WALK1 = 1
