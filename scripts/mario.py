@@ -7,6 +7,7 @@ class Mario:
     def __init__(self):
         self.lives = 3
         self.mario_bros = load_all_images()["mario_bros"]
+        
         self.status = "active"
         self.facing_right = True
         self.state = STAND
@@ -41,7 +42,7 @@ class Mario:
         self.draw(win)
 
     def draw(self, win):
-        win.fill((12, 12, 200))    
+ 
         win.blit(self.image, (self.rect.x, self.rect.y))
 
     def animation(self):
@@ -131,9 +132,6 @@ class Mario:
         #     if self.x_vel > 0:
         #         self.x_vel = 0
 
-       
-        
-
     def jumping(self):
         self.animation_index = MOV_JUMP
 
@@ -142,13 +140,11 @@ class Mario:
             if self.y_vel > 0:
                 self.y_vel = 0
                 self.state = WALK
- 
             
     def get_image(self, x, y, width, height):
         layer = pygame.Surface([width, height]).convert()
         rect = layer.get_rect()
     
-
         layer.blit(self.mario_bros, (0, 0), (x, y, width, height))
         layer.set_colorkey((0, 0, 0))
         layer = pygame.transform.scale(layer, (rect.width * SIZE_MULTIPLIER, rect.height * SIZE_MULTIPLIER))
