@@ -29,7 +29,10 @@ class Controller:
         self.mario.update(self.keys_pressed, self.win)
 
     def camera(self):
-        self.bg_rect.x = self.bg_rect.x - 1
+        if self.keys_pressed[pygame.K_d]:
+            self.bg_rect.x = self.bg_rect.x - 10
+        elif self.keys_pressed[pygame.K_a]:
+            self.bg_rect.x = self.bg_rect.x + 10
 
     def main(self):
         while True: #always running

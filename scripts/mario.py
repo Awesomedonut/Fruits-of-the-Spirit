@@ -32,7 +32,7 @@ class Mario:
 
         self.image = self.right_frames[self.animation_index]
         self.rect = self.image.get_rect()
-        self.rect.y = SCREEN_HEIGHT - 200
+        self.rect.y = SCREEN_HEIGHT - GROUND_OFFSET
         self.rect.x = 0
 
     def update(self, keys_pressed, win):
@@ -70,7 +70,6 @@ class Mario:
             self.state = JUMP
             self.y_vel = self.jump_height
            
-
         if keys_pressed[pygame.K_a]:
             self.facing_right = False
             self.state = WALK
@@ -111,10 +110,10 @@ class Mario:
                 print(self.x_vel)
 
                 if self.facing_right:
-                    if self.x_vel < 0.55:
+                    if self.x_vel < 0.65:
                         self.x_vel = 0
                 else:
-                    if self.x_vel > -0.55:
+                    if self.x_vel > -0.65:
                         self.x_vel = 0
             else:
                 self.state = STAND
@@ -136,7 +135,7 @@ class Mario:
         self.animation_index = MOV_JUMP
 
         self.y_vel += self.gravity
-        if (self.rect.bottom > SCREEN_HEIGHT - 200 + 96 ):
+        if (self.rect.bottom > SCREEN_HEIGHT - GROUND_OFFSET + 90):
             if self.y_vel > 0:
                 self.y_vel = 0
                 self.state = WALK
