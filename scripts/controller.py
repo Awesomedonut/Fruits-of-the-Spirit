@@ -13,6 +13,7 @@ class Controller:
         self.bg = load_all_images()["level_1"]
         self.bg_rect = self.bg.get_rect()
         self.bg = pygame.transform.scale(self.bg, (self.bg_rect.width * BG_MULTIPLIER, self.bg_rect.height * BG_MULTIPLIER))
+        self.camera_shift = 0
 
     def event_loop(self):
         for event in pygame.event.get():
@@ -29,10 +30,14 @@ class Controller:
         self.mario.update(self.keys_pressed, self.win)
 
     def camera(self):
-        if self.keys_pressed[pygame.K_d]:
-            self.bg_rect.x = self.bg_rect.x - 10
-        elif self.keys_pressed[pygame.K_a]:
-            self.bg_rect.x = self.bg_rect.x + 10
+        if self.mario.rect.x > SCREEN_WIDTH // 2:
+            self.camera_shift = self.mario.rect.x - (SCREEN_WIDTH // 2)
+            
+        else:
+            self.camera_shift = 0
+        if self.mario.state == WALK:
+            self.bg_rect.x = self.bg_rect.x - self.camera_shift
+            self.mario.rect.x -= self.camera_shift
 
     def main(self):
         while True: #always running
