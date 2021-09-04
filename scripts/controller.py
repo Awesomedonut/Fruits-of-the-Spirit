@@ -2,6 +2,7 @@ import pygame
 from scripts.mario import Mario
 from scripts.constants import *
 from scripts.utils import *
+from scripts.gadget import *
 
 class Controller:
 
@@ -14,6 +15,8 @@ class Controller:
         self.bg_rect = self.bg.get_rect()
         self.bg = pygame.transform.scale(self.bg, (self.bg_rect.width * BG_MULTIPLIER, self.bg_rect.height * BG_MULTIPLIER))
         self.camera_shift = 0
+        self.pipes = []
+        #self.setup_pipes()
 
     def event_loop(self):
         for event in pygame.event.get():
@@ -35,9 +38,17 @@ class Controller:
             
         else:
             self.camera_shift = 0
-        if self.mario.state == WALK:
-            self.bg_rect.x = self.bg_rect.x - self.camera_shift
-            self.mario.rect.x -= self.camera_shift
+       # if self.mario.state == WALK:
+        self.bg_rect.x = self.bg_rect.x - self.camera_shift
+        self.mario.rect.x -= self.camera_shift
+
+    def setup_pipes(self):
+        self.pipes.append(Gadget(1202, 452, 83, 82))
+        self.pipes.append(Gadget(1631, 409, 83, 140))
+        self.pipes.append(Gadget(1973, 366, 83, 170))
+        self.pipes.append(Gadget(2445, 366, 83, 170))
+        self.pipes.append(Gadget(6989, 452, 83, 82))
+        self.pipes.append(Gadget(0, 0, 100, 200))
 
     def main(self):
         while True: #always running
@@ -45,4 +56,5 @@ class Controller:
             self.event_loop()
             self.update()
             self.camera()
+            self.setup_pipes()
             pygame.display.update()
