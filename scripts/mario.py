@@ -32,7 +32,7 @@ class Mario:
 
         self.image = self.right_frames[self.animation_index]
         self.rect = self.image.get_rect()
-        self.rect.y = SCREEN_HEIGHT - GROUND_OFFSET
+        self.rect.y = SCREEN_HEIGHT - GROUND_OFFSET + STARTING_POINT_OFFSET
         self.rect.x = 0
 
     def update(self, keys_pressed, win):
@@ -121,22 +121,15 @@ class Mario:
         if keys_pressed[pygame.K_w]:
             self.y_vel = self.jump_height
             self.state = JUMP
-        
-        # if self.x_vel > 0 and self.facing_right == True:
-        #     self.x_vel -= self.friction
-        #     if self.x_vel < 0:
-        #         self.x_vel = 0
-        # elif self.x_vel < 0 and self.facing_right == False:
-        #     self.x_vel += self.friction
-        #     if self.x_vel > 0:
-        #         self.x_vel = 0
-
+     
     def jumping(self):
         self.animation_index = MOV_JUMP
 
         self.y_vel += self.gravity
-        if (self.rect.bottom > SCREEN_HEIGHT - GROUND_OFFSET + 90):
+        if (self.rect.y > SCREEN_HEIGHT - GROUND_OFFSET):
+            print(f"a {self.y_vel}  {self.rect.y}")
             if self.y_vel > 0:
+                print(f"b {self.y_vel}  {self.rect.y}")
                 self.y_vel = 0
                 self.state = WALK
             
@@ -146,7 +139,7 @@ class Mario:
     
         layer.blit(self.mario_bros, (0, 0), (x, y, width, height))
         layer.set_colorkey((0, 0, 0))
-        layer = pygame.transform.scale(layer, (rect.width * SIZE_MULTIPLIER, rect.height * SIZE_MULTIPLIER))
+        layer = pygame.transform.scale(layer, (int(rect.width * SIZE_MULTIPLIER), int(rect.height * SIZE_MULTIPLIER)))
         
         return layer
 

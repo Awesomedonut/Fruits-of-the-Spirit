@@ -13,7 +13,7 @@ class Controller:
         self.mario = Mario()
         self.bg = load_all_images()["level_1"]
         self.bg_rect = self.bg.get_rect()
-        self.bg = pygame.transform.scale(self.bg, (self.bg_rect.width * BG_MULTIPLIER, self.bg_rect.height * BG_MULTIPLIER))
+        self.bg = pygame.transform.scale(self.bg, (int(self.bg_rect.width * BG_MULTIPLIER), int(self.bg_rect.height * BG_MULTIPLIER)))
         self.camera_shift = 0
         self.pipes = []
         #self.setup_pipes()
@@ -48,7 +48,7 @@ class Controller:
         self.pipes.append(Gadget(1973, 366, 83, 170))
         self.pipes.append(Gadget(2445, 366, 83, 170))
         self.pipes.append(Gadget(6989, 452, 83, 82))
-        self.pipes.append(Gadget(0, 0, 100, 200))
+    
 
     def main(self):
         while True: #always running
