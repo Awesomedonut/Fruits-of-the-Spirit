@@ -7,5 +7,7 @@ class Gadget:
         self.rect.x = x
         self.rect.y = y
         self.collider.fill((255, 0, 0))
-        pygame.display.get_surface().blit(self.collider, (x, y))
+
+    def draw(self):
+        pygame.display.get_surface().blit(self.collider, (self.rect.x, self.rect.y))
 

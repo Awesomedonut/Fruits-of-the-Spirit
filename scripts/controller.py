@@ -16,7 +16,7 @@ class Controller:
         self.bg = pygame.transform.scale(self.bg, (int(self.bg_rect.width * BG_MULTIPLIER), int(self.bg_rect.height * BG_MULTIPLIER)))
         self.camera_shift = 0
         self.pipes = []
-        #self.setup_pipes()
+        self.setup_pipes()
 
     def event_loop(self):
         for event in pygame.event.get():
@@ -30,6 +30,8 @@ class Controller:
     def update(self):
         
         pygame.display.get_surface().blit(self.bg, self.bg_rect)
+        for pipe in self.pipes:
+            pipe.draw()
         self.mario.update(self.keys_pressed, self.win)
 
     def camera(self):
@@ -40,6 +42,8 @@ class Controller:
             self.camera_shift = 0
        # if self.mario.state == WALK:
         self.bg_rect.x = self.bg_rect.x - self.camera_shift
+        for pipe in self.pipes:
+            pipe.rect.x -= self.camera_shift
         self.mario.rect.x -= self.camera_shift
 
     def setup_pipes(self):
@@ -48,7 +52,7 @@ class Controller:
         self.pipes.append(Gadget(1973, 366, 83, 170))
         self.pipes.append(Gadget(2445, 366, 83, 170))
         self.pipes.append(Gadget(6989, 452, 83, 82))
-    
+        # last pipe near the end self.pipes.append(Gadget(6989, 452, 83, 82))
 
     def main(self):
         while True: #always running
@@ -56,5 +60,5 @@ class Controller:
             self.event_loop()
             self.update()
             self.camera()
-            self.setup_pipes()
+            
             pygame.display.update()
