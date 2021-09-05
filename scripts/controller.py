@@ -33,6 +33,7 @@ class Controller:
         for pipe in self.pipes:
             pipe.draw()
         self.mario.update(self.keys_pressed, self.win)
+        print(self.check_collisions_between_mario_and_pipes())
 
     def camera(self):
         if self.mario.rect.x > SCREEN_WIDTH // 2:
@@ -54,11 +55,23 @@ class Controller:
         self.pipes.append(Gadget(6989, 452, 83, 82))
         # last pipe near the end self.pipes.append(Gadget(6989, 452, 83, 82))
 
+    def check_collisions_between_mario_and_pipes(self):
+        for pipe in self.pipes:
+            if self.mario.rect.x + self.mario.width > pipe.rect.x and self.mario.rect.x < pipe.rect.x + pipe.width and self.mario.rect.y + self.mario.height > pipe.rect.y:
+                    return True
+
+            # if self.mario.rect.y > pipe.rect.y:
+            #     self.mario.rect.x < pipe.rect.x + pipe.width
+            #     return True
+
+        return False
+        
+
+
     def main(self):
         while True: #always running
             pygame.time.Clock().tick(60) 
             self.event_loop()
             self.update()
             self.camera()
-            
             pygame.display.update()

@@ -6,6 +6,8 @@ class Gadget:
         self.rect = self.collider.get_rect()
         self.rect.x = x
         self.rect.y = y
+        self.width = width
+        self.height = height
         self.collider.fill((255, 0, 0))
 
     def draw(self):

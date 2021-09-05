@@ -35,6 +35,9 @@ class Mario:
         self.rect.y = SCREEN_HEIGHT - GROUND_OFFSET + STARTING_POINT_OFFSET
         self.rect.x = 0
 
+        self.width = 0
+        self.height = 0
+
     def update(self, keys_pressed, win):
         self.handle_state(keys_pressed)
         self.update_pos()
@@ -139,7 +142,9 @@ class Mario:
     
         layer.blit(self.mario_bros, (0, 0), (x, y, width, height))
         layer.set_colorkey((0, 0, 0))
-        layer = pygame.transform.scale(layer, (int(rect.width * SIZE_MULTIPLIER), int(rect.height * SIZE_MULTIPLIER)))
+        self.width = int(rect.width * SIZE_MULTIPLIER)
+        self.height = int(rect.height * SIZE_MULTIPLIER)
+        layer = pygame.transform.scale(layer, (self.width, self.height))
         
         return layer
 
